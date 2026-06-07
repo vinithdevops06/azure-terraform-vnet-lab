@@ -1,0 +1,30 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  serviceConnection: 'sc-terraform-github-lab'
+
+steps:
+- checkout: self
+
+- script: |
+    wget -q https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip
+    unzip terraform_1.8.5_linux_amd64.zip
+    sudo mv terraform /usr/local/bin/
+    terraform version
+  displayName: Install Terraform
+
+- task: AzureCLI@2
+  displayName: Terraform Init Plan Apply
+  inputs:
+    azureSubscription: $(serviceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      terraform init
+      terraform validate
+      terraform plan
+      terraform apply -auto-approve
