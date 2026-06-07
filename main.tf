@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "network" {
-  name     = "rg-vinith-network-001"
+  name     = "rg-vinith-network-0001"
   location = "uksouth"
 }
 
